@@ -15,6 +15,7 @@ import net.minecraft.resources.Identifier;
  * @param max                 최대치
  * @param naturalRegenPerTick 틱당 자연회복량 (0 = 자연회복 없음)
  * @param allowNegative       true면 잔량이 0보다 클 때 비용을 초과 지불해 음수까지 허용 (§4-1 몰아쓰기)
+ * @param hudColor            HUD 바 채움 색(ARGB). 리소스에 HUD 정보를 담아 바를 자동 생성한다 (§3-4 #5)
  */
-public record ResourceType(Identifier id, double max, double naturalRegenPerTick, boolean allowNegative) {
+public record ResourceType(Identifier id, double max, double naturalRegenPerTick, boolean allowNegative, int hudColor) {
 }

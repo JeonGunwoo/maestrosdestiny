@@ -19,9 +19,9 @@ import net.minecraft.resources.Identifier;
 public final class ModResources {
     private static final Map<Identifier, ResourceType> REGISTRY = new LinkedHashMap<>();
 
-    /** 첫 리소스: 스태미나. max 100, 틱당 0.5 회복(≈10/s), 음수 허용(§4-1). */
+    /** 첫 리소스: 스태미나. max 100, 틱당 0.5 회복(≈10/s), 음수 허용(§4-1), HUD 모스그린. */
     public static final ResourceType STAMINA = register(
-            new ResourceType(id("stamina"), 100.0, 0.5, true));
+            new ResourceType(id("stamina"), 100.0, 0.5, true, 0xFF7FB04F));
 
     private ModResources() {
     }

@@ -1,8 +1,10 @@
 package com.maestrosdestiny;
 
 import com.maestrosdestiny.client.ClientResourceHandlers;
+import com.maestrosdestiny.client.ResourceHudLayer;
 
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -17,9 +19,12 @@ import net.neoforged.neoforge.common.NeoForge;
 @Mod(value = MaestrosDestiny.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = MaestrosDestiny.MODID, value = Dist.CLIENT)
 public class MaestrosDestinyClient {
-    public MaestrosDestinyClient(ModContainer container) {
+    public MaestrosDestinyClient(ModContainer container, IEventBus modEventBus) {
         // 클라이언트 리소스 배선: S2C 수신 훅 + 자연회복 예측 (게임 이벤트 버스)
         ClientResourceHandlers.init(NeoForge.EVENT_BUS);
+
+        // HUD 레이어 등록 (모드 버스). 리소스 정의 → 바 자동 생성.
+        modEventBus.addListener(ResourceHudLayer::onRegisterGuiLayers);
     }
 
     @SubscribeEvent
