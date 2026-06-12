@@ -2,6 +2,11 @@ package com.maestrosdestiny;
 
 import org.slf4j.Logger;
 
+import com.maestrosdestiny.combat.resource.MdAttachments;
+import com.maestrosdestiny.combat.resource.MdResourceCommand;
+import com.maestrosdestiny.combat.resource.ResourceTickHandler;
+import com.maestrosdestiny.network.MdPayloads;
+import com.maestrosdestiny.network.ResourceSyncServer;
 import com.mojang.logging.LogUtils;
 
 import net.neoforged.bus.api.IEventBus;
@@ -34,6 +39,21 @@ public class MaestrosDestiny {
     public MaestrosDestiny(IEventBus modEventBus, ModContainer modContainer) {
         // 모드 이벤트 버스에 공용 셋업 리스너 등록
         modEventBus.addListener(this::commonSetup);
+
+        // 리소스 시스템: Attachment 타입 등록 (모드 버스)
+        MdAttachments.register(modEventBus);
+
+        // 네트워크: 패킷 카탈로그 등록 (모드 버스)
+        modEventBus.addListener(MdPayloads::onRegister);
+
+        // 게임 이벤트 버스 리스너: 자연회복 틱 + 디버그 커맨드
+        NeoForge.EVENT_BUS.addListener(ResourceTickHandler::onServerTickPost);
+        NeoForge.EVENT_BUS.addListener(MdResourceCommand::onRegisterCommands);
+
+        // 서버 사이드 리소스 동기화 송신 (즉시 + 정기 + 접속 시)
+        NeoForge.EVENT_BUS.addListener(ResourceSyncServer::onResourceChanged);
+        NeoForge.EVENT_BUS.addListener(ResourceSyncServer::onServerTickPost);
+        NeoForge.EVENT_BUS.addListener(ResourceSyncServer::onPlayerLoggedIn);
 
         // 이 클래스의 @SubscribeEvent 핸들러를 게임 이벤트 버스에 등록
         NeoForge.EVENT_BUS.register(this);
